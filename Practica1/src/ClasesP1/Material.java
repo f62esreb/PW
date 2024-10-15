@@ -3,7 +3,7 @@ package ClasesP1;
 /**
  * Clase que representa el material que puede ser 
  * reservado junto a la pista.
- * */
+ */
 public class Material {
 	
 	
@@ -34,7 +34,7 @@ public class Material {
 	
 	/**
 	 * Constructor vacío.
-	 * */
+	 */
 	
 	public Material() {
 		
@@ -60,7 +60,7 @@ public class Material {
 	/**
 	 * Obtiene el identificador del material.
 	 * @return identificador del material.
-	 * */
+	 */
 	public void getId() {
 		
 		return idMaterial;
@@ -69,7 +69,7 @@ public class Material {
 	/**
 	 * Establece el identificador del material.
 	 * @param idNuevo El nuevo identificador del material.
-	 * */
+	 */
 	public void setId(int idNuevo) {
 		
 		thid.idMaterial = idNuevo;
@@ -79,7 +79,7 @@ public class Material {
 	/**
 	 * Obtiene el tipo de material.
 	 * @return el tipo de material ( pelotas, canastas, conos).
-	 * */
+	 */
 	public tipoMaterial getTipo() {
 		
 		return tipo;
@@ -89,7 +89,7 @@ public class Material {
 	/**
 	 * Establece el tipo de material.
 	 * @param tipoNuevo El nuevo tipo de material.
-	 * */
+	 */
 	public void setTipo(tipoMaterial tipoNuevo) {
 		
 		this.tipo = tipoNuevo;
@@ -99,7 +99,7 @@ public class Material {
 	/**
 	 * Verifica si el material es para uso en interior.
 	 * @return true si es para interior, false si es para exterior.
-	 * */
+	 */
 	public boolean getUsoInterior() {
 		
 		return usoInterior;
@@ -109,7 +109,7 @@ public class Material {
 	/**
 	 * Establece si el material es para uso interior o exterior.
 	 * @param usoInterior true si es para interior, false si es para exterior.
-	 * */
+	 */
 	public void setUsoInterior(boolean nuevoUso) {
 		
 		this.usoInterior = nuevoUso;
@@ -119,7 +119,7 @@ public class Material {
 	/**
 	 * Obtiene el estado del material.
 	 * @return estado del material ( disponible, reservado, mal estado).
-	 * */
+	 */
 	public estadoMaterial getEstado() {
 		
 		return estado;
@@ -129,7 +129,7 @@ public class Material {
 	/**
 	 * Establece el estado del material.
 	 * @param estadoNuevo El nuevo estado del material.
-	 * */
+	 */
 	
 	public void setEstado(estadoMaterial nuevoEstado) {
 		
@@ -140,7 +140,7 @@ public class Material {
 	/**
 	 * Devuelve una cadena de texto con la información del material.
 	 * @return Información del material: idMaterial, tipoMaterial, usoInterior y estadoMaterial.
-	 * */
+	 */
 	@Override
 	public String toString() {
 		

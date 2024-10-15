@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Clase que representa una pista de baloncesto disponible
  * en las instalaciones.
- * */
+ */
 
 public class Pista {
 
@@ -36,7 +36,7 @@ public class Pista {
 	
 	/**
 	 * Constructor vacío.
-	 * */
+	 */
 	
 	public Pista() {
 		
@@ -51,7 +51,7 @@ public class Pista {
 	 * @param pistaInterior true si es pista interior, false si es exterior.
 	 * @param tam El tamaño de la pista
 	 * @param nMax El número máximo de jugadores.
-	 * */
+	 */
 	public Pista(String nombrePista, boolean pistaDisponible, boolean pistaInterior, tamPista tam, int nMax ) {
 		
 		this.nombrePista = nombrePista;
@@ -66,7 +66,7 @@ public class Pista {
 	/**
 	 * Obtiene el nombre de la pista.
 	 * @return el nombre de la pista.
-	 * */
+	 */
 	public String getNombre() {
 		
 		return nombrePista;
@@ -76,7 +76,7 @@ public class Pista {
 	/**
 	 * Establece el nombre de la pista.
 	 * @param nombreNuevo El nuevo nombre de la pista.
-	 * */
+	 */
 	public void setNombre(String nombreNuevo) {
 		
 		this.nombrePista = nombreNuevo;
@@ -85,7 +85,7 @@ public class Pista {
 	/**
 	 * Obtiene el estado de la pista.
 	 * @return el estado de la pista.
-	 * */
+	 */
 	public boolean getPistaDisponible() {
 		
 		return pistaDisponible;
@@ -95,7 +95,7 @@ public class Pista {
 	/**
 	 * Establece el estado de la pista.
 	 * @param estadoNuevo El nuevo nombre de la pista.
-	 * */
+	 */
 	public void setEstadoPista(String estadoNuevo) {
 		
 		this.pistaDisponible = estadoNuevo;
@@ -105,7 +105,7 @@ public class Pista {
 	/**
 	 * Obtiene el tipo de la pista.
 	 * @return true si es interior, false si es exterior.
-	 * */
+	 */
 	public boolean getTipoPista() {
 		
 		return pistaInterior;
@@ -115,7 +115,7 @@ public class Pista {
 	/**
 	 * Establece el tipo de la pista.
 	 * @param tipoNuevo El nuevo tipo de la pista.
-	 * */
+	 */
 	public void setTipoPista(boolean tipoNuevo) {
 		
 		this.pistaInterior = tipoNuevo;
@@ -124,7 +124,7 @@ public class Pista {
 	/**
 	 * Obtiene el ntamaño de la pista.
 	 * @return el tamaño  de la pista (Minibasket, Adultos, 3vs3).
-	 * */
+	 */
 	public tamPista getTam() {
 		
 		return tam;
@@ -134,7 +134,7 @@ public class Pista {
 	/**
 	 * Establece el tamaño de la pista.
 	 * @param tamNuevo El nuevo tamaño de la pista.
-	 * */
+	 */
 	public void setTam(tamPista tamNuevo) {
 		
 		this.tam = tamNuevo;
@@ -144,7 +144,7 @@ public class Pista {
 	/**
 	 * Obtiene el máximo de jugadores.
 	 * @return el máximo de jugadores.
-	 * */
+	 */
 	public int getNMax() {
 		
 		return nMax;
@@ -154,7 +154,7 @@ public class Pista {
 	/**
 	 * Establece el máximo de jugadores.
 	 * @param nMaxNuevo el nuevo máximo de jugadores.
-	 * */
+	 */
 	public void setNMax(int nMaxNuevo) {
 		
 		this.nMax = nMaxNuevo;
@@ -164,7 +164,7 @@ public class Pista {
 	/**
 	 * Obtiene la lista de materiales.
 	 * @return la lista de materiales.
-	 * */
+	 */
 	public ArrayList<Material> getMaterialesLista() {
 		
 		return materiales;
@@ -174,7 +174,7 @@ public class Pista {
 	/**
 	 * Establece una lista de materiales.
 	 * @param materialesNuevo nueva lista de materiales.
-	 * */
+	 */
 	public void setMaterialesLista(ArrayList<Material> materialesNuevo) {
 		
 		this.materiales = materialesNuevo;
@@ -184,7 +184,7 @@ public class Pista {
 	/**
 	 * Imprime información sobre la psita.
 	 * @return información sobre la pista: nombre, estado, tipo, tamaño, número máximo de jugadores, materiales.
-	 * */
+	 */
 	@Override
 	public String toString() {
 		
@@ -200,7 +200,7 @@ public class Pista {
 	/**
 	 * Método que devuelve el subconjunto de materiales que no están en mal estado ni reservados.
 	 * @return materiales disponibles.
-	 * */
+	 */
 	public ArrayList<Material> consultarMaterialesDisponibles(){
 		
 		ArrayList<Material> disponibles = new ArrayList<>();
@@ -226,7 +226,7 @@ public class Pista {
 	 * 
 	 * @param material El material a asociar.
 	 * @return true si se puede asociar correctamente, false en caso contrario.
-	 * */
+	 */
 	public boolean asociarMaterialAPista(Material material) {
 		
 		int pelotas = 0, canastas = 0, conos = 0;
