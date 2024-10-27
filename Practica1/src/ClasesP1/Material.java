@@ -61,7 +61,7 @@ public class Material {
 	 * Obtiene el identificador del material.
 	 * @return identificador del material.
 	 */
-	public void getId() {
+	public int getId() {
 		
 		return idMaterial;
 	}
@@ -72,7 +72,7 @@ public class Material {
 	 */
 	public void setId(int idNuevo) {
 		
-		thid.idMaterial = idNuevo;
+		this.idMaterial = idNuevo;
 		
 	}
 	
@@ -85,7 +85,7 @@ public class Material {
 		return tipo;
 		
 	}
-	void
+
 	/**
 	 * Establece el tipo de material.
 	 * @param tipoNuevo El nuevo tipo de material.

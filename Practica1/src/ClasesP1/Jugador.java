@@ -172,7 +172,7 @@ public class Jugador {
 		int ant = fechaActual.get(Calendar.YEAR) - fechaInscripcion.get(Calendar.YEAR);
 		
 		//Si aun no ha llegado la fecha de hacer un año este año, restamos 1.
-		If(fechaActual.get(Calendar.DAY_OF_YEAR) < fechaInscripcion.get(Calendar.DAY_OF_YEAR)){
+		if(fechaActual.get(Calendar.DAY_OF_YEAR) < fechaInscripcion.get(Calendar.DAY_OF_YEAR)){
 			
 			ant--;
 			

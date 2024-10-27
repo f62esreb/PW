@@ -6,12 +6,14 @@ public class ReservaFamiliar extends Reserva {
     private int numAdultos;
     private int numNinos;
 
+    // Constructor sin parámetros
     public ReservaFamiliar() {
-        super();
+        super(); // Llama al constructor sin parámetros de Reserva
     }
 
-    public ReservaFamiliar(String usuarioId, Date fechaHora, int duracion, String pistaId, float precio, float descuento, int numAdultos, int numNinos) {
-        super(usuarioId, fechaHora, duracion, pistaId, precio, descuento);
+    // Constructor con parámetros
+    public ReservaFamiliar(int id, String usuarioId, Date fechaHora, int duracion, String pistaId, float precio, float descuento, int numAdultos, int numNinos) {
+        super(id, usuarioId, fechaHora, duracion, pistaId, precio, descuento);
         this.numAdultos = numAdultos;
         this.numNinos = numNinos;
     }

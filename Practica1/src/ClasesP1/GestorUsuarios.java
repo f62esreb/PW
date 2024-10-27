@@ -15,7 +15,7 @@ public class GestorUsuarios {
 
     // Lista para almacenar los usuarios registrados
     private List<Jugador> usuarios;
-    private static final String FILE_USUARIOS = "usuarios.txt";
+    private static final String FILE_USUARIOS = "data/usuarios.txt";
 
     /**
      * Constructor que inicializa la lista de usuarios y carga los datos desde el archivo.
@@ -58,6 +58,20 @@ public class GestorUsuarios {
                     System.out.println("Opción no válida. Inténtalo de nuevo.");
             }
         }
+    }
+
+    /**
+    * Método para buscar un usuario por su correo electrónico.
+    * @param correo El correo del usuario a buscar.
+    * @return El usuario encontrado, o null si no existe.
+    */
+    public Jugador buscarUsuario(String correo) {
+        for (Jugador jugador : usuarios) {
+            if (jugador.getCorreo().equals(correo)) {
+                return jugador;
+            }
+        }
+        return null; // Usuario no encontrado
     }
 
     /**

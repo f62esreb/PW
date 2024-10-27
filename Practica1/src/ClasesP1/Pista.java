@@ -1,7 +1,5 @@
 package ClasesP1;
 
-import ClasesP1.Material.estadoMaterial;
-import ClasesP1.Material.tipoMaterial;
 import java.util.*;
 
 /**
@@ -28,7 +26,7 @@ public class Pista {
 	
 	public enum tamPista{
 		
-		MIINIBASKET, ADULTOS, _3VS3
+		MINIBASKET, ADULTOS, TRES_VS_TRES
 	
 	}
 	
@@ -94,9 +92,9 @@ public class Pista {
 	
 	/**
 	 * Establece el estado de la pista.
-	 * @param estadoNuevo El nuevo nombre de la pista.
+	 * @param estadoNuevo El nuevo estado de la pista.
 	 */
-	public void setEstadoPista(String estadoNuevo) {
+	public void setEstadoPista(boolean estadoNuevo) {
 		
 		this.pistaDisponible = estadoNuevo;
 		

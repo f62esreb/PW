@@ -1,6 +1,8 @@
 package ClasesP1;
 
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -18,7 +20,7 @@ public class GestorReservas {
     private List<Bono> bonos;
     private GestorUsuarios gestorUsuarios;
     private GestorDePistas gestorPistas;
-    private static final String FILE_RESERVAS = "reservas.txt";
+    private static final String FILE_RESERVAS = "data/reservas.txt";
 
     /**
      * Constructor que inicializa las listas de reservas y bonos, y carga los datos desde el archivo.
@@ -74,10 +76,7 @@ public class GestorReservas {
         }
     }
 
-    /**
-     * Método para realizar una reserva individual, solicitando los datos al usuario.
-     * @param scanner Objeto Scanner para leer la entrada del usuario.
-     */
+    // Métodos para crear reservas individuales y con bono con interacciones de menú
     private void hacerReservaIndividualMenu(Scanner scanner) {
         System.out.print("Correo del usuario: ");
         String correo = scanner.nextLine();
@@ -98,10 +97,6 @@ public class GestorReservas {
         System.out.println(resultado ? "Reserva realizada con éxito." : "No se pudo hacer la reserva.");
     }
 
-    /**
-     * Método para realizar una reserva utilizando un bono, solicitando los datos al usuario.
-     * @param scanner Objeto Scanner para leer la entrada del usuario.
-     */
     private void hacerReservaBonoMenu(Scanner scanner) {
         System.out.print("Correo del usuario: ");
         String correo = scanner.nextLine();
@@ -122,10 +117,7 @@ public class GestorReservas {
         System.out.println(resultado ? "Reserva realizada con éxito." : "No se pudo hacer la reserva.");
     }
 
-    /**
-     * Método para modificar una reserva existente, solicitando los datos al usuario.
-     * @param scanner Objeto Scanner para leer la entrada del usuario.
-     */
+    // Métodos para modificar y cancelar reservas
     private void modificarReservaMenu(Scanner scanner) {
         System.out.print("ID de la reserva a modificar: ");
         int idReserva = scanner.nextInt();
@@ -138,10 +130,6 @@ public class GestorReservas {
         System.out.println(resultado ? "Reserva modificada con éxito." : "No se pudo modificar la reserva.");
     }
 
-    /**
-     * Método para cancelar una reserva existente, solicitando el ID al usuario.
-     * @param scanner Objeto Scanner para leer la entrada del usuario.
-     */
     private void cancelarReservaMenu(Scanner scanner) {
         System.out.print("ID de la reserva a cancelar: ");
         int idReserva = scanner.nextInt();
@@ -151,23 +139,7 @@ public class GestorReservas {
         System.out.println(resultado ? "Reserva cancelada con éxito." : "No se pudo cancelar la reserva.");
     }
 
-    /**
-     * Método para consultar y listar las reservas futuras.
-     */
-    private void consultarReservasFuturas() {
-        List<Reserva> futuras = reservas.stream()
-                                        .filter(r -> r.getFechaHora().after(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant())))
-                                        .collect(Collectors.toList());
-        if (futuras.isEmpty()) {
-            System.out.println("No hay reservas futuras.");
-        } else {
-            futuras.forEach(reserva -> System.out.println(reserva));
-        }
-    }
-
-    /**
-     * Método para realizar una reserva individual.
-     */
+    // Implementaciones de los métodos de reserva individual y con bono
     public boolean hacerReservaIndividual(String correoUsuario, LocalDateTime fechaHora, int duracion, String nombrePista, int numJugadores, TipoReserva tipoReserva) {
         if (!puedeRealizarReserva(Date.from(fechaHora.atZone(ZoneId.systemDefault()).toInstant()))) {
             System.out.println("Las reservas deben realizarse con al menos 24 horas de antelación.");
@@ -188,19 +160,16 @@ public class GestorReservas {
 
         double precio = calcularPrecioReserva(duracion);
         if (usuario.calcularAntiguedad() > 2) {
-            precio *= 0.9; // 10% de descuento por antigüedad
+            precio *= 0.9;
         }
 
-        Reserva nuevaReserva = new Reserva(usuario, fechaHora, duracion, pista, precio, tipoReserva, numJugadores);
+        Reserva nuevaReserva = new ReservaAdultos(usuario.getCorreo(), Date.from(fechaHora.atZone(ZoneId.systemDefault()).toInstant()), duracion, pista.getNombre(), (float) precio, 0, numJugadores);
         reservas.add(nuevaReserva);
 
         System.out.println("Reserva realizada con éxito. Precio: " + precio + " euros.");
         return true;
     }
 
-    /**
-     * Método para realizar una reserva utilizando un bono.
-     */
     public boolean hacerReservaBono(String correoUsuario, LocalDateTime fechaHora, int duracion, String nombrePista, int numJugadores, TipoReserva tipoReserva) {
         Bono bono = buscarBonoActivo(correoUsuario, tipoReserva);
         if (bono == null) {
@@ -212,8 +181,8 @@ public class GestorReservas {
             return false;
         }
 
-        double precio = calcularPrecioReserva(duracion) * 0.95; // 5% de descuento por bono
-        Reserva nuevaReserva = new Reserva(bono.getUsuario(), fechaHora, duracion, gestorPistas.buscarPista(nombrePista), precio, tipoReserva, numJugadores);
+        double precio = calcularPrecioReserva(duracion) * 0.95;
+        Reserva nuevaReserva = new ReservaAdultos(correoUsuario, Date.from(fechaHora.atZone(ZoneId.systemDefault()).toInstant()), duracion, nombrePista, (float) precio, 0, numJugadores);
         
         bono.agregarReserva(nuevaReserva);
         reservas.add(nuevaReserva);
@@ -222,43 +191,46 @@ public class GestorReservas {
         return true;
     }
 
-    /**
-     * Método para modificar una reserva.
-     */
+    // Métodos adicionales: consultar reservas futuras, guardar y cargar reservas
+    private void consultarReservasFuturas() {
+        List<Reserva> futuras = reservas.stream()
+                .filter(r -> r.getFechaHora().after(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant())))
+                .collect(Collectors.toList());
+        if (futuras.isEmpty()) {
+            System.out.println("No hay reservas futuras.");
+        } else {
+            futuras.forEach(System.out::println);
+        }
+    }
+
     public boolean modificarReserva(int idReserva, Date nuevaFechaHora) {
-        Reserva reserva = buscarReserva(idReserva);
-        if (reserva == null || !puedeRealizarReserva(reserva.getFechaHora())) {
-            System.out.println("No se puede modificar la reserva.");
-            return false;
+        for (Reserva reserva : reservas) {
+            if (reserva.getId() == idReserva && puedeRealizarReserva(reserva.getFechaHora())) {
+                reserva.setFechaHora(nuevaFechaHora);
+                System.out.println("Reserva modificada con éxito.");
+                return true;
+            }
         }
-
-        reserva.setFechaHora(nuevaFechaHora);
-        System.out.println("Reserva modificada con éxito.");
-        return true;
+        System.out.println("No se puede modificar la reserva.");
+        return false;
     }
 
-    /**
-     * Método para cancelar una reserva.
-     */
     public boolean cancelarReserva(int idReserva) {
-        Reserva reserva = buscarReserva(idReserva);
-        if (reserva == null || !puedeRealizarReserva(reserva.getFechaHora())) {
-            System.out.println("No se puede cancelar la reserva.");
-            return false;
+        for (Reserva reserva : reservas) {
+            if (reserva.getId() == idReserva && puedeRealizarReserva(reserva.getFechaHora())) {
+                reservas.remove(reserva);
+                System.out.println("Reserva cancelada con éxito.");
+                return true;
+            }
         }
-
-        reservas.remove(reserva);
-        System.out.println("Reserva cancelada con éxito.");
-        return true;
+        System.out.println("No se puede cancelar la reserva.");
+        return false;
     }
 
-    /**
-     * Método para guardar las reservas actuales en un archivo de texto.
-     */
     public void guardarReservas() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_RESERVAS))) {
             for (Reserva reserva : reservas) {
-                bw.write(reserva.toString()); // Convierte la reserva a un formato de texto adecuado
+                bw.write(reserva.toString());
                 bw.newLine();
             }
         } catch (IOException e) {
@@ -266,32 +238,34 @@ public class GestorReservas {
         }
     }
 
-    /**
-     * Método para cargar las reservas desde un archivo de texto.
-     */
     public void cargarReservas() {
         try (BufferedReader br = new BufferedReader(new FileReader(FILE_RESERVAS))) {
             String linea;
             while ((linea = br.readLine()) != null) {
-                // Convertir cada línea en una instancia de Reserva y añadir a la lista de reservas
-                // Implementar el código para convertir desde el formato guardado a una reserva
+                // Suponiendo que la línea se divide en atributos de la reserva separados por comas
+                String[] datos = linea.split(",");
+                String usuarioId = datos[0];
+                Date fechaHora = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(datos[1]);
+                int duracion = Integer.parseInt(datos[2]);
+                String pistaId = datos[3];
+                float precio = Float.parseFloat(datos[4]);
+                float descuento = Float.parseFloat(datos[5]);
+                // Ejemplo de creación de una reserva general; ajusta según tipo de reserva específico
+                Reserva reserva = new ReservaAdultos(usuarioId, fechaHora, duracion, pistaId, precio, descuento, 4);
+                reservas.add(reserva);
             }
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             System.out.println("Error al cargar el archivo de reservas: " + e.getMessage());
         }
     }
 
-    /**
-     * Método para verificar si se puede realizar una reserva con al menos 24 horas de anticipación.
-     */
+
+    // Otros métodos de utilidad
     private boolean puedeRealizarReserva(Date fechaHora) {
         Date fechaLimite = Date.from(LocalDateTime.now().plusHours(24).atZone(ZoneId.systemDefault()).toInstant());
         return fechaHora.after(fechaLimite);
     }
 
-    /**
-     * Calcula el precio de la reserva en función de la duración.
-     */
     private double calcularPrecioReserva(int duracion) {
         switch (duracion) {
             case 60: return 20;
@@ -301,29 +275,21 @@ public class GestorReservas {
         }
     }
 
-    /**
-     * Verifica si la pista es adecuada para el tipo de reserva y número de jugadores.
-     */
     private boolean esPistaAdecuada(Pista pista, TipoReserva tipoReserva, int numJugadores) {
-        return pista.getTam() == tipoReserva.getTamanoPista() && pista.getNMax() >= numJugadores;
+        return pista.getTam().name().equals(tipoReserva.getTamanoPista().name()) && pista.getNMax() >= numJugadores;
     }
+    
 
-    /**
-     * Busca un bono activo de un usuario para un tipo de reserva específico.
-     */
     private Bono buscarBonoActivo(String correoUsuario, TipoReserva tipoReserva) {
         return bonos.stream()
-                    .filter(b -> b.getUsuario().getCorreo().equals(correoUsuario) &&
-                                 b.getTipoReserva() == tipoReserva &&
-                                 b.getSesionesRestantes() > 0 &&
-                                 b.getFechaCaducidad().isAfter(LocalDate.now()))
-                    .findFirst()
-                    .orElse(null);
+                .filter(b -> b.getUsuario().getCorreo().equals(correoUsuario) &&
+                        b.getTipoReserva() == tipoReserva &&
+                        b.getSesionesRestantes() > 0 &&
+                        b.getFechaCaducidad().isAfter(LocalDate.now()))
+                .findFirst()
+                .orElse(null);
     }
 
-    /**
-     * Crea un nuevo bono para un usuario.
-     */
     private Bono crearNuevoBono(String correoUsuario, TipoReserva tipoReserva) {
         Jugador usuario = gestorUsuarios.buscarUsuario(correoUsuario);
         Bono nuevoBono = new Bono(usuario, tipoReserva);
@@ -331,16 +297,9 @@ public class GestorReservas {
         return nuevoBono;
     }
 
-    /**
-     * Busca una reserva por su ID.
-     */
-    private Reserva buscarReserva(int idReserva) {
-        return reservas.stream()
-                       .filter(r -> r.getId() == idReserva)
-                       .findFirst()
-                       .orElse(null);
-    }
+    
 }
+
 
 
 class Bono {
