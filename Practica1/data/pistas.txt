@@ -1,0 +1,3 @@
+Pista1,true,true,ADULTOS,10
+Pista2,false,false,MINIBASKET,6
+Pista3,true,true,TRES_VS_TRES,6

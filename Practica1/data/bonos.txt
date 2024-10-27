@@ -1,0 +1,3 @@
+juan.perez@example.com,ADULTOS,3,2024-11-01
+maria.lopez@example.com,FAMILIAR,1,2024-08-15
+carlos.ruiz@example.com,INFANTIL,2,2024-12-20
