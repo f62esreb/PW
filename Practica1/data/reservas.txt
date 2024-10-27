@@ -1,3 +1,0 @@
-1,juan.perez@example.com,2023-11-20T15:00,60,Pista1,20.0,ADULTOS,5
-2,maria.lopez@example.com,2023-11-25T10:00,90,Pista2,30.0,INFANTIL,3
-3,carlos.ruiz@example.com,2023-11-30T18:00,120,Pista3,40.0,FAMILIAR,6
