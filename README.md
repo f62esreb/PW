@@ -6,7 +6,7 @@ Este proyecto es una aplicación en Java para gestionar reservas de pistas depor
 - [Características](#características)
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Requisitos Previos](#requisitos-previos)
-- [Instalación](#instalación)
+- [Compilación y Ejecución](#instalación)
 - [Uso](#uso)
 - [Ejemplos de Código](#ejemplos-de-código)
 - [Contribuciones](#contribuciones)
@@ -42,10 +42,10 @@ Para ejecutar este proyecto, necesitas tener instalado:
 
 1. Desde la raíz del proyecto, ejecuta el siguiente comando:
    
-  javac -d bin -sourcepath src src/ClasesP1/*.java
+   javac -d bin -sourcepath src src/ClasesP1/*.java
 
 2. Para ejecutar el proyecto, asegúrate de estar en la raíz del proyecto y ejecuta el siguiente comando:
-
+     
    java -cp bin ClasesP1.Main
 
 3. Para generar un archivo JAR ejecutable:
