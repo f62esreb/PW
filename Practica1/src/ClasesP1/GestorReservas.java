@@ -82,7 +82,7 @@ public class GestorReservas {
         String correo = scanner.nextLine();
         System.out.print("Nombre de la pista: ");
         String nombrePista = scanner.nextLine();
-        System.out.print("Fecha y hora (yyyy-MM-ddTHH:mm): ");
+        System.out.print("Fecha y hora (yyyy-MM-dd HH:mm): ");
         String fechaHoraStr = scanner.nextLine();
         LocalDateTime fechaHora = LocalDateTime.parse(fechaHoraStr);
         System.out.print("Duración (minutos): ");
