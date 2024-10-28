@@ -38,21 +38,23 @@ Para ejecutar este proyecto, necesitas tener instalado:
 - **Java 8** o superior
 - **Maven** (opcional, si deseas compilar el proyecto con Maven)
 
-## Instalación
+## Compilación y Ejecución.
 
-1. Clona este repositorio:
-    ```bash
-    git clone https://github.com/usuario/gestor-de-reservas.git
-    cd gestor-de-reservas
-    ```
-2. Compila el proyecto:
-    ```bash
-    javac -d bin src/**/*.java
-    ```
-3. Ejecuta el programa:
-    ```bash
-    java -cp bin Main
-    ```
+1. Desde la raíz del proyecto, ejecuta el siguiente comando:
+   
+  javac -d bin -sourcepath src src/ClasesP1/*.java
+
+2. Para ejecutar el proyecto, asegúrate de estar en la raíz del proyecto y ejecuta el siguiente comando:
+
+   java -cp bin ClasesP1.Main
+
+3. Para generar un archivo JAR ejecutable:
+
+   jar --create --file ejecutable.jar --main-class ClasesP1.Main -C bin .
+
+4. Y para ejecutar dicho ejecutable, usa el comando:
+
+   java -jar ejecutable.jar
 
 ## Uso
 
