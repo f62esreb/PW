@@ -4,7 +4,7 @@ Este proyecto implementa una aplicación Java para gestionar instalaciones depor
 
 ## Características
 
--Gestión de usuarios: Alta, modificación, listado y eliminación de usuarios registrados.
+-Gestión de jugadores: Alta, modificación, listado y eliminación de jugadores.
 
 -Gestión de pistas: Creación, asociación de materiales, y listado de pistas disponibles/no disponibles.
 
