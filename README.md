@@ -38,7 +38,7 @@ Software necesario
 
 2. Configurar el archivo config.properties con las credenciales y parámetros de conexión:
    
--db.url=(http://oraclepr.uco.es/abd/phpMyAdmin/)
+-db.url=jdbc:mysql://oraclepr.uco.es:3306/f62esreb
 
 -db.username=[f62esreb]
 
