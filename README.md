@@ -50,15 +50,16 @@ Software necesario
 ## Instalación
 
 1. Clonar el repositorio:
-git clone https://github.com/f62esreb/PW
 
-cd gestion-pistas-deportivas
+-git clone https://github.com/f62esreb/PW
 
-3. Compilar y empaquetar el proyecto:
+-cd Practica2
+
+2. Compilar y empaquetar el proyecto:
 mvn clean package
 
-4. Ejecutar el programa desde el archivo JAR generado:
-java -jar target/gestion-pistas-deportivas.jar
+3. Ejecutar el programa desde el archivo JAR generado:
+java -jar target/Practica2.jar
 
 
 
