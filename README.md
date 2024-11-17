@@ -75,5 +75,7 @@ Crear pistas, asociar materiales y consultar pistas disponibles.
 Realizar reservas individuales o a través de bonos.
 
 
+## Aclaración
 
+Al intentar ejecutar el código Main.java, todo funciona sin problemas, excepto que hemos encontrado unos fallos en los DAOs que no nos permiten abordar las funcionalidades de manera correcta.
 
