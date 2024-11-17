@@ -1,86 +1,105 @@
-# Gestor de Reservas Deportivas
+# Gestor de Pistas Deportivas
 
-Este proyecto es una aplicación en Java para gestionar reservas de pistas deportivas. Los usuarios pueden reservar pistas para diferentes tipos de actividades (reservas infantiles, familiares y para adultos), y el sistema permite gestionar usuarios, materiales y bonos de reserva. El programa implementa patrones de diseño como el patrón **Factoría** para la creación de reservas.
-
-## Tabla de Contenidos
-- [Características](#características)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Requisitos Previos](#requisitos-previos)
-- [Compilación y Ejecución](#instalación)
-- [Uso](#uso)
-- [Ejemplos de Código](#ejemplos-de-código)
-- [Contribuciones](#contribuciones)
-- [Licencia](#licencia)
+Este proyecto implementa una aplicación Java para gestionar instalaciones deportivas, incluyendo usuarios, pistas, materiales y reservas. Se utiliza una base de datos MySQL para el almacenamiento de datos, con acceso a través del driver JDBC.
 
 ## Características
 
-- **Gestión de Usuarios**: permite registrar y buscar usuarios para realizar reservas.
-- **Gestión de Pistas y Material**: permite añadir, modificar y consultar la disponibilidad de las pistas y los materiales asociados.
-- **Gestión de Reservas**: permite realizar reservas en diferentes modalidades (infantil, familiar y adultos) y aplicar descuentos según antigüedad.
-- **Patrón de Diseño Factoría**: utilizado para la creación de los diferentes tipos de reservas.
+-Gestión de usuarios: Alta, modificación, listado y eliminación de usuarios registrados.
+
+-Gestión de pistas: Creación, asociación de materiales, y listado de pistas disponibles/no disponibles.
+
+-Gestión de materiales: Asignación y validación según tipo de pista.
+
+-Gestión de reservas: Realización de reservas individuales y a través de bonos con descuentos automáticos.
+
+-Base de datos MySQL: Esquema relacional que soporta las operaciones de la aplicación.
+
+-Patrones de diseño: Uso de DAO y DTO para separar la lógica de negocio del acceso a datos.
+
+-Configuración modular: Uso de archivos config.properties y sql.properties para facilitar la configuración.
+
+
+## Requisitos
+
+Software necesario
+
+-Java 8 o superior
+
+-MySQL 8.0 o superior
+
+-IDE compatible con Java (por ejemplo, IntelliJ IDEA, Eclipse)
+
+-Driver JDBC para MySQL (disponible en MySQL Connector/J)
+
   
-## Estructura del Proyecto
+## Configuración de la base de datos
 
-- **`Jugador`**: Clase que representa a un usuario en el sistema, contiene atributos como nombre, correo electrónico y fecha de registro.
-- **`Material`**: Clase que representa el material disponible para los usuarios (pelotas, aros, etc.).
-- **`Pista`**: Clase que representa una pista deportiva. Cada pista tiene un nombre, tipo y capacidad máxima de jugadores.
-- **`Reserva`**: Clase abstracta base para las reservas. Define los atributos generales, como usuario, fecha, duración y precio.
-- **`ReservaAdultos`, `ReservaInfantil`, `ReservaFamiliar`**: Subclases de `Reserva` que representan los diferentes tipos de reservas, especializadas en función de los participantes.
-- **`ReservaFactory`**: Clase que implementa el patrón Factoría para la creación de los diferentes tipos de reservas.
-- **`GestorUsuarios`**: Clase encargada de gestionar el registro, búsqueda y almacenamiento de usuarios.
-- **`GestorPistas`**: Clase encargada de gestionar la disponibilidad de pistas y la asignación de materiales.
-- **`GestorReservas`**: Clase encargada de gestionar el proceso de reserva, desde la creación hasta la modificación y cancelación de reservas.
-- **`Main`**: Clase principal donde se inicializan los gestores y se permite la interacción con el sistema.
+1. Crear una base de datos en MySQL siguiendo el esquema proporcionado en database/schema.sql.
 
-## Requisitos Previos
-
-Para ejecutar este proyecto, necesitas tener instalado:
-- **Java 8** o superior
-- **Maven** (opcional, si deseas compilar el proyecto con Maven)
-
-## Compilación y Ejecución.
-
-1. Desde la raíz del proyecto, ejecuta el siguiente comando:
+2. Configurar el archivo config.properties con las credenciales y parámetros de conexión:
    
-   javac -d bin -sourcepath src src/ClasesP1/*.java
+-db.url=jdbc:mysql://[host]:[puerto]/[f62esreb]
 
-2. Para ejecutar el proyecto, asegúrate de estar en la raíz del proyecto y ejecuta el siguiente comando:
-     
-   java -cp bin ClasesP1.Main
+-db.username=[f62esreb]
 
-3. Para generar un archivo JAR ejecutable:
+-db.password=[pw-gm2-24]
 
-   jar --create --file ejecutable.jar --main-class ClasesP1.Main -C bin .
+3.  Importar los datos iniciales si es necesario (opcional): database/data.sql.
 
-4. Y para ejecutar dicho ejecutable, usa el comando:
 
-   java -jar ejecutable.jar
+## Instalación
+
+1. Clonar el repositorio:
+git clone https://github.com/[tu_usuario]/gestion-pistas-deportivas.git
+cd gestion-pistas-deportivas
+
+2. Compilar y empaquetar el proyecto:
+mvn clean package
+
+3. Ejecutar el programa desde el archivo JAR generado:
+java -jar target/gestion-pistas-deportivas.jar
+
+
+
+## Estructura del proyecto
+
+
+gestion-pistas-deportivas/
+│
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   ├── business/       # Lógica de negocio
+│   │   │   ├── data/           # Clases DAO para acceso a datos
+│   │   │   ├── dto/            # Objetos de transferencia de datos
+│   │   │   └── app/            # Punto de entrada de la aplicación
+│   │   └── resources/
+│   │       ├── config.properties # Configuración de la base de datos
+│   │       └── sql.properties    # Consultas SQL
+│   └── test/                   # Pruebas unitarias (JUnit)
+│
+├── database/
+│   ├── schema.sql              # Esquema de la base de datos
+│   └── data.sql                # Datos iniciales
+│
+├── README.md                   # Documentación del repositorio
+├── pom.xml                     # Configuración de Maven
+└── target/                     # Archivos compilados y JAR ejecutable
+
+
 
 ## Uso
 
-Al iniciar el programa desde `Main`, se pueden realizar las siguientes acciones:
-1. **Registrar usuarios**: Añade un nuevo usuario a la lista de usuarios registrados.
-2. **Consultar disponibilidad de pistas**: Verifica la disponibilidad de una pista en función de su nombre y tipo.
-3. **Crear reservas**: Crea una reserva para un usuario, seleccionando el tipo de reserva, pista, fecha y duración.
-4. **Modificar o cancelar reservas**: Permite cambiar la fecha de una reserva o cancelarla.
-5. **Consultar materiales disponibles**: Muestra los materiales disponibles para las diferentes pistas.
+1. Gestión de usuarios:
+Alta de usuarios, modificación y consulta mediante la interfaz de texto.
 
-### Ejemplos de Código
+2. Gestión de pistas y materiales:
+Crear pistas, asociar materiales y consultar pistas disponibles.
 
-Ejemplo de cómo hacer una reserva individual:
-```java
-GestorUsuarios gestorUsuarios = new GestorUsuarios();
-GestorPistas gestorPistas = new GestorPistas();
-GestorReservas gestorReservas = new GestorReservas(gestorUsuarios, gestorPistas);
+3. Gestión de reservas:
+Realizar reservas individuales o a través de bonos.
 
-// Crear un usuario
-Jugador usuario = new Jugador("nombre@example.com", "Nombre Usuario");
-gestorUsuarios.registrarUsuario(usuario);
+4.Estadísticas:
+Consultar pistas más utilizadas y usuarios con más reservas.
 
-// Crear una pista
-Pista pista = new Pista("Pista 1", TamanoPista.TRES_VS_TRES, 6);
-gestorPistas.agregarPista(pista);
 
-// Hacer una reserva
-LocalDateTime fechaHora = LocalDateTime.now().plusDays(2);
-gestorReservas.hacerReservaIndividual("nombre@example.com", fechaHora, 60, "Pista 1", 4, TipoReserva.FAMILIAR);
