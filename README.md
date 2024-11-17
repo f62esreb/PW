@@ -38,7 +38,7 @@ Software necesario
 
 2. Configurar el archivo config.properties con las credenciales y parámetros de conexión:
    
--db.url=jdbc:mysql://[host]:[puerto]/[f62esreb]
+-db.url=(http://oraclepr.uco.es/abd/phpMyAdmin/)
 
 -db.username=[f62esreb]
 
@@ -50,13 +50,14 @@ Software necesario
 ## Instalación
 
 1. Clonar el repositorio:
-git clone https://github.com/[tu_usuario]/gestion-pistas-deportivas.git
+git clone 
+
 cd gestion-pistas-deportivas
 
-2. Compilar y empaquetar el proyecto:
+3. Compilar y empaquetar el proyecto:
 mvn clean package
 
-3. Ejecutar el programa desde el archivo JAR generado:
+4. Ejecutar el programa desde el archivo JAR generado:
 java -jar target/gestion-pistas-deportivas.jar
 
 
