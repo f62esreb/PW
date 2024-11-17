@@ -63,33 +63,6 @@ java -jar target/Practica2.jar
 
 
 
-## Estructura del proyecto
-
-
-gestion-pistas-deportivas/
-│
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   ├── business/       # Lógica de negocio
-│   │   │   ├── data/           # Clases DAO para acceso a datos
-│   │   │   ├── dto/            # Objetos de transferencia de datos
-│   │   │   └── app/            # Punto de entrada de la aplicación
-│   │   └── resources/
-│   │       ├── config.properties # Configuración de la base de datos
-│   │       └── sql.properties    # Consultas SQL
-│   └── test/                   # Pruebas unitarias (JUnit)
-│
-├── database/
-│   ├── schema.sql              # Esquema de la base de datos
-│   └── data.sql                # Datos iniciales
-│
-├── README.md                   # Documentación del repositorio
-├── pom.xml                     # Configuración de Maven
-└── target/                     # Archivos compilados y JAR ejecutable
-
-
-
 ## Uso
 
 1. Gestión de usuarios:
