@@ -74,7 +74,6 @@ Crear pistas, asociar materiales y consultar pistas disponibles.
 3. Gestión de reservas:
 Realizar reservas individuales o a través de bonos.
 
-4.Estadísticas:
-Consultar pistas más utilizadas y usuarios con más reservas.
+
 
 
