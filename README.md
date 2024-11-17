@@ -50,7 +50,7 @@ Software necesario
 ## Instalación
 
 1. Clonar el repositorio:
-git clone 
+git clone https://github.com/f62esreb/PW
 
 cd gestion-pistas-deportivas
 
