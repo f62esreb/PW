@@ -2,6 +2,12 @@
 
 Este proyecto implementa una aplicación Java para gestionar instalaciones deportivas, incluyendo usuarios, pistas, materiales y reservas. Se utiliza una base de datos MySQL para el almacenamiento de datos, con acceso a través del driver JDBC.
 
+
+## Aclaración
+
+Al intentar ejecutar el código Main.java, todo funciona sin problemas, excepto que hemos encontrado unos fallos en los DAOs que no nos permiten abordar las funcionalidades de manera correcta.
+
+
 ## Características
 
 -Gestión de jugadores: Alta, modificación, listado y eliminación de jugadores.
@@ -75,7 +81,5 @@ Crear pistas, asociar materiales y consultar pistas disponibles.
 Realizar reservas individuales o a través de bonos.
 
 
-## Aclaración
 
-Al intentar ejecutar el código Main.java, todo funciona sin problemas, excepto que hemos encontrado unos fallos en los DAOs que no nos permiten abordar las funcionalidades de manera correcta.
 
