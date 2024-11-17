@@ -1,32 +1,34 @@
-package ClasesP1;
+package business;
 
-import java.io.*;
-import java.util.ArrayList;
+import data.dao.MaterialDAO;
+import data.dao.PistaDAO;
+import Material;
+import Pista;
+
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
- * Clase que gestiona las pistas y materiales necesarios para dar servicio.
+ * Clase que gestiona las pistas y materiales necesarios para dar servicio utilizando DAOs y DTOs.
  */
 public class GestorDePistas {
 
-    // Atributos
-    private ArrayList<Pista> pistas;
-    private ArrayList<Material> materiales;
-    private static final String FILE_PISTAS = "data/pistas.txt";
-    private static final String FILE_MATERIALES = "data/materiales.txt";
+    // DAOs para manejar las operaciones con la base de datos
+    private final PistaDAO pistaDAO;
+    private final MaterialDAO materialDAO;
 
     /**
-     * Constructor vacío que inicializa las listas de pistas y materiales y carga los datos desde los archivos.
+     * Constructor que inicializa los DAOs.
      */
     public GestorDePistas() {
-        this.pistas = new ArrayList<>();
-        this.materiales = new ArrayList<>();
-        cargarPistas();
-        cargarMateriales();
+        this.pistaDAO = new PistaDAO();
+        this.materialDAO = new MaterialDAO();
     }
 
     /**
      * Menú interactivo para gestionar pistas.
+     *
      * @param scanner Objeto Scanner para leer la entrada del usuario.
      */
     public void menuGestionPistas(Scanner scanner) {
@@ -44,93 +46,97 @@ public class GestorDePistas {
             scanner.nextLine(); // Limpiar el buffer
 
             switch (opcion) {
-                case 1:
-                    crearNuevaPista(scanner);
-                    break;
-                case 2:
-                    crearNuevoMaterial(scanner);
-                    break;
-                case 3:
-                    asociarMaterialAPista(scanner);
-                    break;
-                case 4:
-                    listarPistasNoDisponibles();
-                    break;
-                case 5:
-                    buscarPistasLibres(scanner);
-                    break;
-                case 0:
-                    System.out.println("Volviendo al menú principal...");
-                    break;
-                default:
-                    System.out.println("Opción no válida. Inténtalo de nuevo.");
+                case 1 -> crearNuevaPista(scanner);
+                case 2 -> crearNuevoMaterial(scanner);
+                case 3 -> asociarMaterialAPista(scanner);
+                case 4 -> listarPistasNoDisponibles();
+                case 5 -> buscarPistasLibres(scanner);
+                case 0 -> System.out.println("Volviendo al menú principal...");
+                default -> System.out.println("Opción no válida. Inténtalo de nuevo.");
             }
         }
     }
 
     /**
-     * Método para crear una nueva pista y añadirla a la lista de pistas.
+     * Método para crear una nueva pista y añadirla a la base de datos.
+     *
      * @param scanner Objeto Scanner para leer la entrada del usuario.
      */
     private void crearNuevaPista(Scanner scanner) {
-        System.out.print("Nombre de la pista: ");
-        String nombre = scanner.nextLine();
-        System.out.print("¿Es interior? (true/false): ");
-        boolean esInterior = scanner.nextBoolean();
-        System.out.print("¿Está disponible? (true/false): ");
-        boolean disponible = scanner.nextBoolean();
-        System.out.print("Tamaño (1=Minibasket, 2=Adultos, 3=3vs3): ");
-        int tam = scanner.nextInt();
-        System.out.print("Máximo jugadores: ");
-        int maxJugadores = scanner.nextInt();
-        scanner.nextLine(); // Limpiar el buffer
+        try {
+            System.out.print("ID de la pista: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Limpiar el buffer
+            System.out.print("¿Está disponible? (true/false): ");
+            boolean disponible = scanner.nextBoolean();
+            scanner.nextLine(); // Limpiar el buffer
+            System.out.print("¿Es interior? (true/false): ");
+            boolean interior = scanner.nextBoolean();
+            scanner.nextLine(); // Limpiar el buffer
+            System.out.print("Tamaño (MINIBASKET, ADULTOS, TRES_VS_TRES): ");
+            String tamaño = scanner.nextLine().toUpperCase();
+            System.out.print("Número máximo de jugadores: ");
+            int nMaximo = scanner.nextInt();
+            scanner.nextLine(); // Limpiar el buffer
 
-        Pista.tamPista tamano = (tam == 1) ? Pista.tamPista.MINIBASKET :
-                                (tam == 2) ? Pista.tamPista.ADULTOS : Pista.tamPista.TRES_VS_TRES;
-
-        Pista nuevaPista = new Pista(nombre, disponible, esInterior, tamano, maxJugadores);
-        pistas.add(nuevaPista);
-        System.out.println("Pista creada con éxito.");
+            Pista pista = new Pista(id, disponible, interior, tamaño, nMaximo);
+            pistaDAO.insertarPista(pista);
+            System.out.println("Pista creada con éxito.");
+        } catch (SQLException e) {
+            System.err.println("Error al crear la pista: " + e.getMessage());
+        }
     }
 
     /**
-     * Método para crear un nuevo material y añadirlo a la lista de materiales.
+     * Método para crear un nuevo material y añadirlo a la base de datos.
+     *
      * @param scanner Objeto Scanner para leer la entrada del usuario.
      */
     private void crearNuevoMaterial(Scanner scanner) {
-        System.out.print("ID del material: ");
-        int id = scanner.nextInt();
-        scanner.nextLine(); // Limpiar el buffer
-        System.out.print("Tipo de material (PELOTAS, CANASTAS, CONOS): ");
-        Material.tipoMaterial tipo = Material.tipoMaterial.valueOf(scanner.nextLine().toUpperCase());
-        System.out.print("¿Es para interior? (true/false): ");
-        boolean usoInterior = scanner.nextBoolean();
-        System.out.print("Estado del material (DISPONIBLE, RESERVADO, MAL_ESTADO): ");
-        Material.estadoMaterial estado = Material.estadoMaterial.valueOf(scanner.next().toUpperCase());
+        try {
+            System.out.print("ID del material: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Limpiar el buffer
+            System.out.print("Tipo de material (PELOTAS, CANASTAS, CONOS): ");
+            String tipo = scanner.nextLine().toUpperCase();
+            System.out.print("¿Es para interior? (true/false): ");
+            boolean usoInterior = scanner.nextBoolean();
+            scanner.nextLine(); // Limpiar el buffer
+            System.out.print("Estado del material (DISPONIBLE, RESERVADO, MAL_ESTADO): ");
+            String estado = scanner.nextLine().toUpperCase();
 
-        Material material = new Material(id, tipo, usoInterior, estado);
-        materiales.add(material);
-        System.out.println("Material creado con éxito.");
+            Material material = new Material(id, tipo, usoInterior, estado);
+            materialDAO.insertarMaterial(material);
+            System.out.println("Material creado con éxito.");
+        } catch (SQLException e) {
+            System.err.println("Error al crear el material: " + e.getMessage());
+        }
     }
 
     /**
      * Método para asociar un material a una pista disponible.
+     *
      * @param scanner Objeto Scanner para leer la entrada del usuario.
      */
     private void asociarMaterialAPista(Scanner scanner) {
-        System.out.print("Nombre de la pista: ");
-        String nombrePista = scanner.nextLine();
-        System.out.print("ID del material: ");
-        int idMaterial = scanner.nextInt();
-        scanner.nextLine(); // Limpiar el buffer
+        try {
+            System.out.print("ID de la pista: ");
+            int pistaId = scanner.nextInt();
+            System.out.print("ID del material: ");
+            int materialId = scanner.nextInt();
+            scanner.nextLine(); // Limpiar el buffer
 
-        Pista pista = buscarPistaPorNombre(nombrePista);
-        Material material = buscarMaterialPorId(idMaterial);
+            Pista pista = pistaDAO.buscarPistaPorId(pistaId);
+            Material material = materialDAO.buscarMaterialPorId(materialId);
 
-        if (pista != null && material != null && pista.asociarMaterialAPista(material)) {
-            System.out.println("Material asociado con éxito.");
-        } else {
-            System.out.println("No se pudo asociar el material.");
+            if (pista != null && material != null) {
+                pista.asociarMaterial(material); // Método del DTO Pista para asociar
+                System.out.println("Material asociado con éxito.");
+            } else {
+                System.out.println("No se pudo asociar el material.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al asociar el material a la pista: " + e.getMessage());
         }
     }
 
@@ -138,142 +144,41 @@ public class GestorDePistas {
      * Lista las pistas que no están disponibles.
      */
     private void listarPistasNoDisponibles() {
-        System.out.println("\n--- Pistas No Disponibles ---");
-        for (Pista pista : pistas) {
-            if (!pista.getPistaDisponible()) {
-                System.out.println(pista);
+        try {
+            List<Pista> pistas = pistaDAO.obtenerPistas();
+            System.out.println("\n--- Pistas No Disponibles ---");
+            for (Pista pista : pistas) {
+                if (!pista.isDisponibilidad()) {
+                    System.out.println(pista);
+                }
             }
+        } catch (SQLException e) {
+            System.err.println("Error al listar las pistas: " + e.getMessage());
         }
     }
 
     /**
      * Busca y muestra las pistas disponibles que cumplen con el tipo y número de jugadores.
+     *
      * @param scanner Objeto Scanner para leer la entrada del usuario.
      */
     private void buscarPistasLibres(Scanner scanner) {
-        System.out.print("¿Es interior? (true/false): ");
-        boolean tipoPista = scanner.nextBoolean();
-        System.out.print("Mínimo jugadores: ");
-        int minJugadores = scanner.nextInt();
-        scanner.nextLine(); // Limpiar el buffer
+        try {
+            System.out.print("¿Es interior? (true/false): ");
+            boolean interior = scanner.nextBoolean();
+            System.out.print("Mínimo de jugadores: ");
+            int minJugadores = scanner.nextInt();
+            scanner.nextLine(); // Limpiar el buffer
 
-        System.out.println("\n--- Pistas Libres ---");
-        for (Pista pista : pistas) {
-            if (pista.getPistaDisponible() && pista.getTipoPista() == tipoPista && pista.getNMax() >= minJugadores) {
-                System.out.println(pista);
-            }
-        }
-    }
-
-    /**
-    * Método para buscar una pista por su nombre.
-    * @param nombre El nombre de la pista.
-    * @return La pista si se encuentra, null en caso contrario.
-    */
-    public Pista buscarPista(String nombre) {
-        for (Pista pista : pistas) {
-            if (pista.getNombre().equalsIgnoreCase(nombre)) {
-                return pista;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Método para guardar las pistas actuales en un archivo de texto.
-     */
-    public void guardarPistas() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PISTAS))) {
+            List<Pista> pistas = pistaDAO.obtenerPistas();
+            System.out.println("\n--- Pistas Libres ---");
             for (Pista pista : pistas) {
-                String datos = pista.getNombre() + "," + pista.getPistaDisponible() + "," +
-                               pista.getTipoPista() + "," + pista.getTam() + "," + pista.getNMax();
-                bw.write(datos);
-                bw.newLine();
+                if (pista.isDisponibilidad() && pista.isInterior() == interior && pista.getnMaximo() >= minJugadores) {
+                    System.out.println(pista);
+                }
             }
-        } catch (IOException e) {
-            System.out.println("Error al guardar el archivo de pistas: " + e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Error al buscar pistas libres: " + e.getMessage());
         }
-    }
-
-    /**
-     * Método para cargar las pistas desde un archivo de texto.
-     */
-    public void cargarPistas() {
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PISTAS))) {
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                String[] datos = linea.split(",");
-                String nombre = datos[0];
-                boolean disponible = Boolean.parseBoolean(datos[1]);
-                boolean esInterior = Boolean.parseBoolean(datos[2]);
-                Pista.tamPista tam = Pista.tamPista.valueOf(datos[3].toUpperCase());
-                int maxJugadores = Integer.parseInt(datos[4]);
-                pistas.add(new Pista(nombre, disponible, esInterior, tam, maxJugadores));
-            }
-        } catch (IOException e) {
-            System.out.println("Error al cargar el archivo de pistas: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Método para guardar los materiales actuales en un archivo de texto.
-     */
-    public void guardarMateriales() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_MATERIALES))) {
-            for (Material material : materiales) {
-                String datos = material.getId() + "," + material.getTipo() + "," + material.getUsoInterior() + "," + material.getEstado();
-                bw.write(datos);
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("Error al guardar el archivo de materiales: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Método para cargar los materiales desde un archivo de texto.
-     */
-    public void cargarMateriales() {
-        try (BufferedReader br = new BufferedReader(new FileReader(FILE_MATERIALES))) {
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                String[] datos = linea.split(",");
-                int id = Integer.parseInt(datos[0]);
-                Material.tipoMaterial tipo = Material.tipoMaterial.valueOf(datos[1]);
-                boolean usoInterior = Boolean.parseBoolean(datos[2]);
-                Material.estadoMaterial estado = Material.estadoMaterial.valueOf(datos[3]);
-                materiales.add(new Material(id, tipo, usoInterior, estado));
-            }
-        } catch (IOException e) {
-            System.out.println("Error al cargar el archivo de materiales: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Método privado para buscar una pista por su nombre.
-     * @param nombre El nombre de la pista.
-     * @return La pista si se encuentra, null en caso contrario.
-     */
-    private Pista buscarPistaPorNombre(String nombre) {
-        for (Pista pista : pistas) {
-            if (pista.getNombre().equals(nombre)) {
-                return pista;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Método privado para buscar un material por su ID.
-     * @param id El ID del material.
-     * @return El material si se encuentra, null en caso contrario.
-     */
-    private Material buscarMaterialPorId(int id) {
-        for (Material material : materiales) {
-            if (material.getId() == id) {
-                return material;
-            }
-        }
-        return null;
     }
 }
